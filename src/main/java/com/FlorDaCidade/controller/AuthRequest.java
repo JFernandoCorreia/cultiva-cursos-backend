@@ -4,6 +4,9 @@ public class AuthRequest {
   private String email; // Use 'email' em vez de 'username'
   private String password;
 
+  // Construtor
+  public AuthRequest() {}
+
   // Getters
   public String getEmail() {
       return email;
@@ -21,4 +24,9 @@ public class AuthRequest {
   public void setPassword(String password) {
       this.password = password;
   }
+
+public Object getUsername() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
+}
 }

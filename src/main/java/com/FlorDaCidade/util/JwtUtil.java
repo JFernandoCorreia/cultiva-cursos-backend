@@ -13,7 +13,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "secretaKey"; // Defina sua chave secreta aqui
+    private String SECRET_KEY = "CultivaCursos"; // Define chave secreta aqui
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -37,16 +37,16 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(Object object) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        return createToken(claims, object);
     }
 
     @SuppressWarnings("deprecation")
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createToken(Map<String, Object> claims, Object object) {
         return Jwts.builder()
                    .setClaims(claims)
-                   .setSubject(subject)
+                   .setSubject((String) object) // Agora você pode usar o subject diretamente
                    .setIssuedAt(new Date(System.currentTimeMillis()))
                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Validade do token (10 horas)
                    .signWith(SignatureAlgorithm.HS256, SECRET_KEY)

@@ -21,7 +21,6 @@ public class CourseController {
     @Autowired
     private CourseService cursoService;
 
-    @SuppressWarnings("unused")
     @Autowired
     private JwtUtil jwtUtil;
 
