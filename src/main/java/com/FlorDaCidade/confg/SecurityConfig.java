@@ -25,22 +25,16 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService; // Injetar o UserDetailsService
 
+    
+    
     @SuppressWarnings("deprecation")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-            .authorizeRequests(requests -> {
-                try {
-                    requests
-                    .requestMatchers("/login", "/register").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                    .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            });
+            .authorizeRequests(requests -> requests
+                .requestMatchers("/login", "/register").permitAll()
+                .anyRequest().authenticated())
+            .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -55,7 +49,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder()); // Configurar UserDetailsService corretamente
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
     }
 }
