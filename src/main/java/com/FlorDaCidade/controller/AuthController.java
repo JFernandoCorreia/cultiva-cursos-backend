@@ -1,33 +1,50 @@
 package com.FlorDaCidade.controller;
 
 import com.FlorDaCidade.model.User;
-import com.FlorDaCidade.util.JwtUtil;
+import com.FlorDaCidade.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings("unused")
 @RestController
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private com.FlorDaCidade.util.JwtUtil jwtUtil;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody AuthRequest authRequest) {
-        Authentication authenticate = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        String jwt = jwtUtil.generateToken(authRequest.getUsername());
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+        try {
+            String email = credentials.get("email");
+            String password = credentials.get("password");
+
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+            );
+
+            String token = jwtUtil.generateToken(email);
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(401).body("Credenciais inválidas");
+        }
     }
 }

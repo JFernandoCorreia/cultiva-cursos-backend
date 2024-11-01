@@ -1,5 +1,4 @@
 com\FlorDaCidade\controller\SpringBootTest.class
-com\FlorDaCidade\confg\DatabaseConfig.class
 com\FlorDaCidade\controller\AuthenticationResponse.class
 com\FlorDaCidade\confg\GlobalExceptionHandler$ErrorMessage.class
 com\FlorDaCidade\confg\WebConfig.class
@@ -29,6 +28,7 @@ com\FlorDaCidade\controller\CourseController.class
 com\FlorDaCidade\repository\CourseRepository.class
 com\FlorDaCidade\FlorDaCidadeApplication.class
 com\FlorDaCidade\model\Course.class
+com\FlorDaCidade\confg\DataSourceConfig.class
 com\FlorDaCidade\service\MockitoExtension.class
 com\FlorDaCidade\controller\AuthRequest.class
 com\FlorDaCidade\confg\SecurityConfig.class

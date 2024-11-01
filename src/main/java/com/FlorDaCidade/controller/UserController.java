@@ -11,7 +11,7 @@ import com.FlorDaCidade.model.User;
 import com.FlorDaCidade.service.UserService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -20,11 +20,10 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
-            @SuppressWarnings("unused")
-            User savedUser = userService.salvarUsuario(user);
+            userService.saveUser(user);
             return ResponseEntity.ok("Usuário registrado com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Erro ao registrar usuário");
+            return ResponseEntity.status(500).body("Erro ao registrar usuário");
         }
     }
 }

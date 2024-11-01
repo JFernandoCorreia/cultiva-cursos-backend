@@ -61,4 +61,9 @@ public class UserService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'passwordEncoder'");
     }
+
+    public void saveUser(User user) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'saveUser'");
+    }
 }
