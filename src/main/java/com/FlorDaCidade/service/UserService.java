@@ -3,8 +3,10 @@ package com.FlorDaCidade.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,11 @@ import jakarta.annotation.PostConstruct;
 @Configuration
 @Service
 public class UserService {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Autowired
     private UserRepository usuarioRepository;
@@ -57,10 +64,6 @@ public class UserService {
         }
     }
 
-    private BCryptPasswordEncoder passwordEncoder() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'passwordEncoder'");
-    }
 
     public void saveUser(User user) {
       // TODO Auto-generated method stub

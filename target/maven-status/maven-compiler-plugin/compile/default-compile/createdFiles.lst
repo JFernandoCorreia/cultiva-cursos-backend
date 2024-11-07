@@ -21,6 +21,7 @@ com\FlorDaCidade\controller\UserControllerTest.class
 com\FlorDaCidade\service\OngoingStubbing.class
 com\FlorDaCidade\confg\GlobalExceptionHandler.class
 com\FlorDaCidade\service\CustomUserDetailsService.class
+com\FlorDaCidade\security\JwtRequestFilter$User.class
 com\FlorDaCidade\controller\Gson.class
 com\FlorDaCidade\util\JwtUtil.class
 com\FlorDaCidade\confg\WebSecurityConfigurerAdapter.class

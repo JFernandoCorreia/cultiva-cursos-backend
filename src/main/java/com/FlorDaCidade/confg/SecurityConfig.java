@@ -1,7 +1,7 @@
 package com.FlorDaCidade.confg;
 
 import com.FlorDaCidade.security.JwtRequestFilter;
-import com.FlorDaCidade.service.CustomUserDetailsService; // Certifique-se de que a classe está importada
+import com.FlorDaCidade.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,16 +23,14 @@ public class SecurityConfig {
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    private CustomUserDetailsService userDetailsService; // Injetar o UserDetailsService
+    private CustomUserDetailsService userDetailsService;
 
-    
-    
     @SuppressWarnings("deprecation")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
             .authorizeRequests(requests -> requests
-                .requestMatchers("/login", "/register").permitAll()
+                .requestMatchers("/login", "/api/users/register").permitAll()
                 .anyRequest().authenticated())
             .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
