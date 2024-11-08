@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>flor-da-cidade-backend</name>
-    <description>Backend do projeto Flor da Cidade</description>
+    <description>Backend do projeto Cultiva Cursos</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
