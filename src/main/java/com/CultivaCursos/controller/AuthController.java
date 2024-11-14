@@ -1,5 +1,6 @@
 package com.CultivaCursos.controller;
 
+import com.CultivaCursos.util.JwtUtil;
 import com.CultivaCursos.model.User;
 import com.CultivaCursos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private com.FlorDaCidade.util.JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     @Autowired
     private UserService userService;

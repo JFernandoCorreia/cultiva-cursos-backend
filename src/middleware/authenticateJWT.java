@@ -1,6 +1,6 @@
-package com.FlorDaCidade.middleware;
+package com.CultivaCursos.middleware;
 
-import com.FlorDaCidade.util.JwtUtil;
+import com.CultivaCursos.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
