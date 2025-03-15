@@ -3,6 +3,7 @@ package com.CultivaCursos.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,13 @@ public class TestController {
     private UserRepository userRepository;
 
     @GetMapping("/users")
-    public List<User> getUsers() {
-        return userRepository.findAll();  // Verifica se consegue obter usuários
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userRepository.findAll();
+
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Retorna 204 se não houver usuários
+        }
+
+        return ResponseEntity.ok(users); // Retorna 200 OK com a lista de usuários
     }
 }

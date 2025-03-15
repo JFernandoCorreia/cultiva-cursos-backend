@@ -1,19 +1,16 @@
 package com.CultivaCursos.model;
 
-import java.util.Date;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import java.util.Date;
 
 @Entity
 @Table(name = "lista_espera")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ListaEspera {
 
     @Id
@@ -21,46 +18,14 @@ public class ListaEspera {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "curso_id")
+    @JoinColumn(name = "curso_id", nullable = false)
     private Course curso;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", nullable = false)
     private User usuario;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date dataInscricao;
-
-    // Getters e Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Course getCurso() {
-        return curso;
-    }
-
-    public void setCurso(Course curso) {
-        this.curso = curso;
-    }
-
-    public User getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(User usuario) {
-        this.usuario = usuario;
-    }
-
-    public Date getDataInscricao() {
-        return dataInscricao;
-    }
-
-    public void setDataInscricao(Date dataInscricao) {
-        this.dataInscricao = dataInscricao;
-    }
 }

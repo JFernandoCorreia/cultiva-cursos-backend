@@ -1,21 +1,23 @@
 package com.CultivaCursos.controller;
 
-import com.CultivaCursos.util.JwtUtil;
-import com.CultivaCursos.model.User;
-import com.CultivaCursos.service.UserService;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.CultivaCursos.dto.LoginRequest;
+import com.CultivaCursos.service.UserService;
+import com.CultivaCursos.util.JwtUtil;
 
-@SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -26,26 +28,28 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @SuppressWarnings("unused")
     @Autowired
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            String email = credentials.get("email");
-            String password = credentials.get("password");
-
+            @SuppressWarnings("unused")
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
             );
 
-            String token = jwtUtil.generateToken(email);
-            Map<String, String> response = new HashMap<>();
+            String token = jwtUtil.generateToken(loginRequest.getEmail());
+
+            Map<String, Object> response = new HashMap<>();
             response.put("token", token);
+            response.put("message", "Login realizado com sucesso");
+            response.put("email", loginRequest.getEmail());
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Credenciais inválidas");
+            return ResponseEntity.status(401).body(Map.of("error", "Credenciais inválidas. Verifique seu e-mail e senha."));
         }
     }
 }

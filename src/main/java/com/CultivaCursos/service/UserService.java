@@ -3,9 +3,6 @@ package com.CultivaCursos.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,58 +12,59 @@ import com.CultivaCursos.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
 
-@Configuration
 @Service
 public class UserService {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository usuarioRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User salvarUsuario(User usuario) {
-        String senhaHash = passwordEncoder.encode(usuario.getPassword());
-        usuario.setPassword(senhaHash);
-        return usuarioRepository.save(usuario);
+    public User salvarUsuario(User user) {
+        // Verifica se o usuário já existe pelo CPF ou email
+        if (userRepository.findByCpf(user.getCpf()).isPresent()) {
+            throw new IllegalArgumentException("Usuário com este CPF já existe.");
+        }
+
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Usuário com este e-mail já existe.");
+        }
+
+        // Hash da senha antes de salvar
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
-    public List<User> listarUsuarios() {
-        return usuarioRepository.findAll();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
     @PostConstruct
     public void inicializarUsuarios() {
-        if (usuarioRepository.findAll().isEmpty()) {
-            // Criação de usuário comum
-            User usuarioComum = new User();
-            usuarioComum.setNome("João Silva");
-            usuarioComum.setEmail("joaosilva@example.com");
-            usuarioComum.setCpf("12345678901");
-            usuarioComum.setPassword(passwordEncoder().encode("0123456"));  // Criptografando a senha
-            usuarioRepository.save(usuarioComum);
-
-            // Criação de funcionário
-            User funcionario = new User();
-            funcionario.setNome("João Silva Funcionario");
-            funcionario.setEmail("joaosilva@example.rec.br");
-            funcionario.setCpf("98765432100");
-            funcionario.setPassword(passwordEncoder().encode("0123456"));  // Criptografando a senha
-            usuarioRepository.save(funcionario);
+        if (userRepository.count() == 0) { // Verifica se há usuários antes de criar
+            criarUsuario("João Silva", "joaosilva@example.com", "12345678901");
+            criarUsuario("João Silva Funcionario", "joaosilva@example.rec.br", "98765432100");
         }
     }
 
+    public User saveUser(User user) {
+        return salvarUsuario(user);
+    }
 
-    public void saveUser(User user) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'saveUser'");
+    private void criarUsuario(String nome, String email, String cpf) {
+        User user = new User();
+        user.setNome(nome);
+        user.setEmail(email);
+        user.setCpf(cpf);
+        user.setPassword(passwordEncoder.encode("0123456"));
+        userRepository.save(user);
     }
 }

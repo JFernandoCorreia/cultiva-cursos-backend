@@ -1,32 +1,13 @@
 package com.CultivaCursos.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthRequest {
-  private String email; // Use 'email' em vez de 'username'
-  private String password;
-
-  // Construtor
-  public AuthRequest() {}
-
-  // Getters
-  public String getEmail() {
-      return email;
-  }
-
-  public String getPassword() {
-      return password;
-  }
-
-  // Setters
-  public void setEmail(String email) {
-      this.email = email;
-  }
-
-  public void setPassword(String password) {
-      this.password = password;
-  }
-
-public Object getUsername() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
-}
+    private String email;
+    private String password;
 }

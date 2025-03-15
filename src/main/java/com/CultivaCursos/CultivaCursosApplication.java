@@ -1,19 +1,24 @@
 package com.CultivaCursos;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io.github.cdimascio.dotenv.Dotenv;
 
 @SpringBootApplication
 public class CultivaCursosApplication {
 
     public static void main(String[] args) {
-        Dotenv dotenv = Dotenv.load();
+        // Carregar variáveis de ambiente do arquivo .env
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
-        // Configuração das variáveis do banco de dados
-        System.setProperty("DB_URL", dotenv.get("DB_URL"));
-        System.setProperty("DB_USER", dotenv.get("DB_USER"));
-        System.setProperty("DB_PASS", dotenv.get("DB_PASS"));
+        String dbUrl = dotenv.get("DB_URL", "NÃO DEFINIDO");
+        String dbUser = dotenv.get("DB_USER", "NÃO DEFINIDO");
+        String dbPass = dotenv.get("DB_PASS", "********"); // Oculta a senha por segurança
+
+        System.out.println("🚀 Iniciando CultivaCursos...");
+        System.out.println("📌 DB_URL: " + dbUrl);
+        System.out.println("👤 DB_USER: " + dbUser);
+        System.out.println("🔒 DB_PASS: " + dbPass);
 
         SpringApplication.run(CultivaCursosApplication.class, args);
     }

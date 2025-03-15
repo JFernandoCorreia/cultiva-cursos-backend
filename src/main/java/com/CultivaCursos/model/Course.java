@@ -2,6 +2,7 @@ package com.CultivaCursos.model;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,11 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "cursos")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Course {
 
     @Id
@@ -21,64 +29,34 @@ public class Course {
     private Long id;
 
     @NotBlank(message = "Nome do curso não pode ser vazio")
+    @Column(nullable = false)
     private String nome;
 
     private String descricao;
 
     @Positive(message = "O número de vagas deve ser positivo")
+    @Column(nullable = false)
     private int vagas;
 
     private String local;
 
     @Temporal(TemporalType.DATE)
+    @FutureOrPresent(message = "A data limite de inscrição deve ser no presente ou no futuro")
     private Date dataLimiteInscricao;
 
-    // Getters e Setters
-    public Long getId() {
-        return id;
+    @Temporal(TemporalType.DATE)
+    private Date data;
+
+    public Date getData() {
+        return data;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setData(Date data) {
+        this.data = data;
     }
 
-    public String getNome() {
-        return nome;
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public int getVagas() {
-        return vagas;
-    }
-
-    public void setVagas(int vagas) {
-        this.vagas = vagas;
-    }
-
-    public String getLocal() {
-        return local;
-    }
-
-    public void setLocal(String local) {
-        this.local = local;
-    }
-
-    public Date getDataLimiteInscricao() {
-        return dataLimiteInscricao;
-    }
-
-    public void setDataLimiteInscricao(Date dataLimiteInscricao) {
-        this.dataLimiteInscricao = dataLimiteInscricao;
-    }
 }

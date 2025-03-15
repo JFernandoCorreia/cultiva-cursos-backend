@@ -1,24 +1,30 @@
 package com.CultivaCursos.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "usuarios")
-public class User {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "CPF não pode ser vazio")
-    @Pattern(regexp="\\d{11}", message="Formato de CPF inválido")
+    @Pattern(regexp = "\\d{11}", message = "Formato de CPF inválido")
+    @Column(nullable = false, unique = true)
     private String cpf;
 
     @NotBlank(message = "Nome não pode ser vazio")
@@ -26,6 +32,7 @@ public class User {
 
     @NotBlank(message = "Email não pode ser vazio")
     @Email(message = "Formato de email inválido")
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotBlank(message = "Senha não pode ser vazia")
@@ -34,63 +41,51 @@ public class User {
     @NotBlank(message = "Tipo de usuário não pode ser vazio")
     private String tipoUsuario;
 
-    // Getters e Setters
-    public Long getId() {
-        return id;
+    // Implementação do UserDetails para Spring Security
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList(); // Pode ser ajustado para diferentes permissões no futuro
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return password;
-    }
-
-    public void setPassword(String senha) {
-        this.password = senha;
-    }
-
-    public String getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
-    public String getUsername() {
-      // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
-    }
-
+    @Override
     public String getPassword() {
-      // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+        return password; // Retorna a senha do usuário
+    }
+
+    @Override
+    public String getUsername() {
+        return email; // O email será usado como nome de usuário
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @NotBlank(message = "Telefone não pode ser vazio")
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
 }
